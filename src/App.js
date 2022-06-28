@@ -23,6 +23,13 @@ class App extends Component {
       input: "",
     }
   }
+  //funcion para input y button
+  onInputChange(event){
+    console.log(event.target.value);
+  }
+  onButtonChange(event){
+    console.log("Click");
+  }
  
   render(){
     return (
@@ -31,7 +38,7 @@ class App extends Component {
         <Navigator/>
         <Logo/>
         <Rank/>
-        <ImageLinkForm/>
+        <ImageLinkForm onInputChange={this.onInputChange} onButtonChange={this.onButtonChange}/>  
         {/*<FaceRecognition/>*/}
       </div>
     );
