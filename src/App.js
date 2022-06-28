@@ -13,7 +13,7 @@ function App() {
 
   const particlesInit = useCallback(main => {
     loadFull(main);
-  }, [])
+  }, []);
 
   return (
     <div className="App">

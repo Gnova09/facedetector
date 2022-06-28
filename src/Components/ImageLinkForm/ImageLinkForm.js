@@ -8,7 +8,7 @@ const ImageLinkForm = () => {
           <div>
                 <div className="pa4 br3 shadow-2">
                     <input classname=" f4 pa2 w-70" type="text"/>
-                    <button className=" grow ph3 pv2 white bg-light-blue">Enter</button>
+                    <button className=" ml1 ba b--white br2 grow ph3 white pv2 bg-gray">Enter</button>
                 </div>
           </div>
         </div>
