@@ -5,6 +5,7 @@ import Navigator from "./Components/Navigator/Navidator";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import Particlesconfig from "./Components/Particles/Particlesconfig.json";
+import FaceRecognition from "./Components/FaceRecognition/FaceRecognition";
 import Logo from "./Components/Logo/Logo";
 import ImageLinkForm from "./Components/ImageLinkForm/ImageLinkForm";
 import Rank from './Components/Rank/Rank';
@@ -39,7 +40,7 @@ class App extends Component {
         <Logo/>
         <Rank/>
         <ImageLinkForm onInputChange={this.onInputChange} onButtonChange={this.onButtonChange}/>  
-        {/*<FaceRecognition/>*/}
+        <FaceRecognition/>
       </div>
     );
   }  
