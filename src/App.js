@@ -20,39 +20,14 @@ const APP_ID = '75942c613a1344518ee944a0d22d03de';
 const MODEL_ID = 'face-detection';
 const MODEL_VERSION_ID = '45fb9a671625463fa646c3523a3087d5';
 // Change this to whatever image URL you want to process
-var IMAGE_URL2 = "";
+
 
 
 ///////////////////////////////////////////////////////////////////////////////////
 // YOU DO NOT NEED TO CHANGE ANYTHING BELOW THIS LINE TO RUN THIS EXAMPLE
 ///////////////////////////////////////////////////////////////////////////////////
 
-var raw = JSON.stringify({
-    "user_app_id": {
-        "user_id": USER_ID,
-        "app_id": APP_ID
-    },
-    "inputs": [
-        {
-            "data": {
-                "image": {
-                    "url": IMAGE_URL2
-                }
-            }
-        }
-    ]
-});
 
-var requestOptions = {
-    method: 'POST',
-    headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Key ' + PAT
-    },
-    body: raw
-};
-
-  
 
 //aqui es donde se inicilizan las particulas
 const particlesInit = async (main) => { 
@@ -68,21 +43,43 @@ class App extends Component {
       IMAGE_URL: "",
     }
   }
-
+  
   //funcion para input y button
   onInputChange = (event) => {
     this.setState({input: event.target.value});
-    console.log(this.state.input);
   }
-  
 
-  onButtonChange= ()=>{
-    this.setState({IMAGE_URL: this.state.input});
-    IMAGE_URL2 = this.state.IMAGE_URL;
+  onButtonChange = async ()=>{
+    await this.setState({IMAGE_URL: this.state.input});
+
+    const raw = JSON.stringify({
+      "user_app_id": {
+          "user_id": USER_ID,
+          "app_id": APP_ID
+      },
+      "inputs": [
+          {
+            "data": {
+                "image": {
+                     "url": this.state.IMAGE_URL
+                }
+            }
+          }
+      ]
+  });
+  
+  const requestOptions = {
+      method: 'POST',
+      headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Key ' + PAT
+      },
+      body: raw
+  };
     
-    fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
+    await fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
         .then(response => response.json())
-        .then(result => console.log(result))
+        .then(result => console.log(result.outputs[0].data.regions[0].region_info.bounding_box))
         .catch(error => console.log('error', error));
   }
  
