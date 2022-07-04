@@ -2,7 +2,7 @@ import React from "react";
 
 const Register = ({ onRouteChange}) => {
     return (
-        <div className=" vh-100 center flex flex-column justify-center">
+        <div className=" center flex flex-column justify-center">
             <main className="pa4 white-80 ">
                 <form onSubmit={()=>onRouteChange("home")} className="measure center" autocomplete="off">
                     <fieldset id="sign_up" className="ba b--transparent ph0 mh0">

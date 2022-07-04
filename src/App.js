@@ -34,7 +34,8 @@ class App extends Component {
       input: "",
       imageUrl: "",
       box: {},
-      route: "signin"
+      route: "signin",
+      isSignedIn: false
     }
   }
 
@@ -44,7 +45,14 @@ class App extends Component {
   }
 
   ///////onRouteChange WITH A BUTTON//////////
-  onRouteChange= (route)=> {this.setState({route: route})}
+  onRouteChange= (route)=> {
+    if(route === "home"){
+      this.setState({isSignedIn: true})
+    }else if(route === "signin"){ 
+      this.setState({isSignedIn: false})
+    }
+    this.setState({route: route})
+  }
   
 
   //CALCULATE FACE LOCATION(BOX) ////////////
@@ -105,16 +113,17 @@ class App extends Component {
 
  ////////////////RENDER PRINCIPAL PAGE///////////////////
   render() {
-    const { imageUrl, box, route} = this.state;
+    const { imageUrl,isSignedIn, box, route} = this.state;
     return (
       <div className="App">
         <Particles options={Particlesconfig} init={particlesInit} />
+        <Navigator isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
         
         {route === "signin"
           ? <Signin onRouteChange={this.onRouteChange} />
           : ( route === "home" 
            ? <div>
-            <Navigator onRouteChange={this.onRouteChange} />
+            
             <Logo />
             <Rank />
             <ImageLinkForm onInputChange={this.onInputChange} onButtonChange={this.onButtonChange} />
