@@ -9,7 +9,8 @@ import FaceRecognition from "./Components/FaceRecognition/FaceRecognition";
 import Logo from "./Components/Logo/Logo";
 import ImageLinkForm from "./Components/ImageLinkForm/ImageLinkForm";
 import Rank from './Components/Rank/Rank';
-
+import Signin from './Components/Signin/signin';
+import Register from './Components/Register/Register';
 
 
 //PARAMETROS PARA PASAR AL FETCH
@@ -19,41 +20,36 @@ const PAT = '51f2b73146a44bc3b182d69687d4c8cf';
 const APP_ID = '75942c613a1344518ee944a0d22d03de';
 const MODEL_ID = 'face-detection';
 const MODEL_VERSION_ID = '45fb9a671625463fa646c3523a3087d5';
-// Change this to whatever image URL you want to process
 
-
-
-///////////////////////////////////////////////////////////////////////////////////
-// YOU DO NOT NEED TO CHANGE ANYTHING BELOW THIS LINE TO RUN THIS EXAMPLE
-///////////////////////////////////////////////////////////////////////////////////
-
-
-
-//aqui es donde se inicilizan las particulas
-const particlesInit = async (main) => { 
+/////STARTED PARTICLES BACKGROUND//////
+const particlesInit = async (main) => {
   console.log(main);
   await loadFull(main);
 };
 
 class App extends Component {
-  constructor(){
+  constructor() {
     super();
     this.state = {
       input: "",
-      IMAGE_URL: "",
-      box: {
-      }
+      imageUrl: "",
+      box: {},
+      route: "signin"
     }
   }
-  
-  //pasamos los valores de facelocation al state
-  displayFacebox =   (boxData) => {
-    this.setState({box: boxData});
-    
+
+  //SETTING THE STATE BOX//////////
+  displayFacebox = (boxData) => {
+    this.setState({ box: boxData });
   }
-  //Calcular caja del rostro
-  FaceLocation = (data) =>{
-    const faceDataLocation = data.outputs[0].data.regions[0].region_info.bounding_box;  
+
+  ///////onRouteChange WITH A BUTTON//////////
+  onRouteChange= (route)=> {this.setState({route: route})}
+  
+
+  //CALCULATE FACE LOCATION(BOX) ////////////
+  FaceLocation = (data) => {
+    const faceDataLocation = data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById("ImageInput");
     const img_width = Number(image.width);
     const img_height = Number(image.height);
@@ -65,58 +61,72 @@ class App extends Component {
       bottom_row: (img_height - (faceDataLocation.bottom_row * img_height)),
       top_row: (faceDataLocation.top_row * img_height),
     }
-}
-  //funcion para input y button
-  onInputChange = (event) => {
-    this.setState({input: event.target.value});
   }
 
-  onButtonChange = async ()=>{
-    await this.setState({IMAGE_URL: this.state.input});
+  ////////////////INPUT & BUTTON PRINCIPAL PAGE///////////////////
+  onInputChange = (event) => {
+    this.setState({ input: event.target.value });
+  }
+
+  onButtonChange = async () => {
+    await this.setState({ imageUrl: this.state.input });
 
     const raw = JSON.stringify({
       "user_app_id": {
-          "user_id": USER_ID,
-          "app_id": APP_ID
+        "user_id": USER_ID,
+        "app_id": APP_ID
       },
       "inputs": [
-          {
-            "data": {
-                "image": {
-                     "url": this.state.IMAGE_URL
-                }
+        {
+          "data": {
+            "image": {
+              "url": this.state.imageUrl
             }
           }
+        }
       ]
-  });
-  
-  const requestOptions = {
+    });
+
+    const requestOptions = {
       method: 'POST',
       headers: {
-          'Accept': 'application/json',
-          'Authorization': 'Key ' + PAT
+        'Accept': 'application/json',
+        'Authorization': 'Key ' + PAT
       },
       body: raw
-  };
-    
+    };
+
     await fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
-          .then(response => response.json())
-          .then(result => this.displayFacebox(this.FaceLocation(result)))
-          .catch(error => console.log('error', error));
+      .then(response => response.json())
+      .then(result => this.displayFacebox(this.FaceLocation(result)))
+      .catch(error => console.log('error', error));
   }
- 
-  render(){
+
+
+ ////////////////RENDER PRINCIPAL PAGE///////////////////
+  render() {
+    const { imageUrl, box, route} = this.state;
     return (
       <div className="App">
-        <Particles options={Particlesconfig} init={particlesInit}/>
-        <Navigator/>
-        <Logo/>
-        <Rank/>
-        <ImageLinkForm onInputChange={this.onInputChange} onButtonChange={this.onButtonChange}/>  
-        <FaceRecognition box = {this.state.box} ImageURL = {this.state.IMAGE_URL}/>
+        <Particles options={Particlesconfig} init={particlesInit} />
+        
+        {route === "signin"
+          ? <Signin onRouteChange={this.onRouteChange} />
+          : ( route === "home" 
+           ? <div>
+            <Navigator onRouteChange={this.onRouteChange} />
+            <Logo />
+            <Rank />
+            <ImageLinkForm onInputChange={this.onInputChange} onButtonChange={this.onButtonChange} />
+            <FaceRecognition box={box} ImageURL={imageUrl} />
+          </div>
+          : <Register onRouteChange={this.onRouteChange} />
+          )
+        }
+
       </div>
     );
-  }  
+  }
 }
 
 export default App;
