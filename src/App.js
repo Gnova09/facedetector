@@ -1,6 +1,6 @@
 
 import './App.css';
-import React, { Component } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navigator from "./Components/Navigator/Navidator";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
@@ -27,36 +27,46 @@ const particlesInit = async (main) => {
   await loadFull(main);
 };
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      input: "",
-      imageUrl: "",
-      box: {},
-      route: "signin",
-      isSignedIn: false
-    }
-  }
+// class App extends Component {
+//   constructor() {
+//     super();
+//     this.state = {
+//       input: "",
+//       imageUrl: "",
+//       box: {},
+//       route: "signin",
+//       isSignedIn: false
+//     }
+//   }
+function App(){
+ 
+  const [route,setRoute]=useState("signin");//creamos el estado de route
 
   //SETTING THE STATE BOX//////////
-  displayFacebox = (boxData) => {
-    this.setState({ box: boxData });
+  const [box,setBox] = useState({});
+  
+  const displayFacebox = (boxData) => {
+    // this.setState({ box: boxData });
+    setBox(boxData);
   }
 
   ///////onRouteChange WITH A BUTTON//////////
-  onRouteChange= (route)=> {
+  const [isSignedIn, setIsSigned] = useState(false);
+  const onRouteChange= (route)=> {
     if(route === "home"){
-      this.setState({isSignedIn: true})
+      // this.setState({isSignedIn: true})
+      setIsSigned(true);
     }else if(route === "signin"){ 
-      this.setState({isSignedIn: false})
+      // this.setState({isSignedIn: false})
+      setIsSigned(false);
     }
-    this.setState({route: route})
+    // this.setState({route: route})
+    setRoute(route);
   }
   
 
   //CALCULATE FACE LOCATION(BOX) ////////////
-  FaceLocation = (data) => {
+  const FaceLocation = (data) => {
     const faceDataLocation = data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById("ImageInput");
     const img_width = Number(image.width);
@@ -72,13 +82,15 @@ class App extends Component {
   }
 
   ////////////////INPUT & BUTTON PRINCIPAL PAGE///////////////////
-  onInputChange = (event) => {
-    this.setState({ input: event.target.value });
+  const [input, setInput] = useState(""); 
+
+  const onInputChange = (event) => {
+    // this.setState({ input: event.target.value });
+    setInput(event.target.value);
   }
-
-  onButtonChange = async () => {
-    await this.setState({ imageUrl: this.state.input });
-
+  const [imageUrl,setImageUrl]=useState("");
+  const onButtonChange = async () => {
+    await setImageUrl(input);
     const raw = JSON.stringify({
       "user_app_id": {
         "user_id": USER_ID,
@@ -112,8 +124,8 @@ class App extends Component {
 
 
  ////////////////RENDER PRINCIPAL PAGE///////////////////
-  render() {
-    const { imageUrl,isSignedIn, box, route} = this.state;
+  
+    
     return (
       <div className="App">
         <Particles options={Particlesconfig} init={particlesInit} />
@@ -135,7 +147,7 @@ class App extends Component {
 
       </div>
     );
-  }
+  
 }
 
 export default App;
