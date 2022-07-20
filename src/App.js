@@ -11,15 +11,10 @@ import ImageLinkForm from "./Components/ImageLinkForm/ImageLinkForm";
 import Rank from './Components/Rank/Rank';
 import Signin from './Components/Signin/signin';
 import Register from './Components/Register/Register';
+import useFetch from "./Hooks/useFetch";
 
 
-//PARAMETROS PARA PASAR AL FETCH
-const USER_ID = 'bi5o8xa6ktoi';
-// Your PAT (Personal Access Token) can be found in the portal under Authentification
-const PAT = '51f2b73146a44bc3b182d69687d4c8cf';
-const APP_ID = '75942c613a1344518ee944a0d22d03de';
-const MODEL_ID = 'face-detection';
-const MODEL_VERSION_ID = '45fb9a671625463fa646c3523a3087d5';
+
 
 /////STARTED PARTICLES BACKGROUND//////
 const particlesInit = async (main) => {
@@ -39,7 +34,7 @@ const particlesInit = async (main) => {
 //     }
 //   }
 function App(){
- 
+  
   const [route,setRoute]=useState("signin");//creamos el estado de route
 
   //SETTING THE STATE BOX//////////
@@ -81,46 +76,28 @@ function App(){
     }
   }
 
-  ////////////////INPUT & BUTTON PRINCIPAL PAGE///////////////////
+  ////////////////INPUT ////////////
   const [input, setInput] = useState(""); 
 
   const onInputChange = (event) => {
     // this.setState({ input: event.target.value });
     setInput(event.target.value);
   }
+/////////BUTTON PRINCIPAL PAGE///////////////////
   const [imageUrl,setImageUrl]=useState("");
-  const onButtonChange = async () => {
-    await setImageUrl(input);
-    const raw = JSON.stringify({
-      "user_app_id": {
-        "user_id": USER_ID,
-        "app_id": APP_ID
-      },
-      "inputs": [
-        {
-          "data": {
-            "image": {
-              "url": this.state.imageUrl
-            }
-          }
-        }
-      ]
-    });
-
-    const requestOptions = {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Authorization': 'Key ' + PAT
-      },
-      body: raw
-    };
-
-    await fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
-      .then(response => response.json())
-      .then(result => this.displayFacebox(this.FaceLocation(result)))
-      .catch(error => console.log('error', error));
-  }
+  
+  useEffect(()=>{
+    setImageUrl(input);
+    
+  },[imageUrl]);
+     
+     
+    
+  //    fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
+  //     .then(response => response.json())
+  //     .then(result =>displayFacebox(FaceLocation(result)))
+  //     .catch(error => console.log('error', error));
+   
 
 
  ////////////////RENDER PRINCIPAL PAGE///////////////////
@@ -129,19 +106,19 @@ function App(){
     return (
       <div className="App">
         <Particles options={Particlesconfig} init={particlesInit} />
-        <Navigator isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
+        <Navigator isSignedIn={isSignedIn} onRouteChange={onRouteChange} />
         
         {route === "signin"
-          ? <Signin onRouteChange={this.onRouteChange} />
+          ? <Signin onRouteChange={onRouteChange} />
           : ( route === "home" 
            ? <div>
             
             <Logo />
             <Rank />
-            <ImageLinkForm onInputChange={this.onInputChange} onButtonChange={this.onButtonChange} />
+            <ImageLinkForm onInputChange={onInputChange} onButtonChange={onButtonChange} />
             <FaceRecognition box={box} ImageURL={imageUrl} />
           </div>
-          : <Register onRouteChange={this.onRouteChange} />
+          : <Register onRouteChange={onRouteChange} />
           )
         }
 
