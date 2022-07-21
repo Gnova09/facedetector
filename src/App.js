@@ -1,6 +1,7 @@
 
 import './App.css';
 import React, { useEffect, useState } from 'react';
+import useFetch from "./Hooks/useFetch.js";
 import Navigator from "./Components/Navigator/Navidator";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
@@ -11,8 +12,6 @@ import ImageLinkForm from "./Components/ImageLinkForm/ImageLinkForm";
 import Rank from './Components/Rank/Rank';
 import Signin from './Components/Signin/signin';
 import Register from './Components/Register/Register';
-import useFetch from "./Hooks/useFetch";
-
 
 
 
@@ -33,19 +32,20 @@ const particlesInit = async (main) => {
 //       isSignedIn: false
 //     }
 //   }
+
 function App(){
   
   const [route,setRoute]=useState("signin");//creamos el estado de route
 
   //SETTING THE STATE BOX//////////
   const [box,setBox] = useState({});
-  
   const displayFacebox = (boxData) => {
     // this.setState({ box: boxData });
     setBox(boxData);
   }
 
   ///////onRouteChange WITH A BUTTON//////////
+  
   const [isSignedIn, setIsSigned] = useState(false);
   const onRouteChange= (route)=> {
     if(route === "home"){
@@ -78,31 +78,31 @@ function App(){
 
   ////////////////INPUT ////////////
   const [input, setInput] = useState(""); 
-
   const onInputChange = (event) => {
     // this.setState({ input: event.target.value });
     setInput(event.target.value);
-  }
-/////////BUTTON PRINCIPAL PAGE///////////////////
-  const [imageUrl,setImageUrl]=useState("");
-  
-  useEffect(()=>{
-    setImageUrl(input);
     
-  },[imageUrl]);
-     
-     
+  }
+
+  /////////BUTTON PRINCIPAL PAGE///////////////////
+  const [imageUrl,setImageUrl]=useState("");
+  const {data,loading, error} = useFetch(imageUrl);
+   
+  const onButtonChange = async () => {
+
+      setImageUrl(input);
+       displayFacebox(FaceLocation(data)); 
+  }
+ 
     
   //    fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
   //     .then(response => response.json())
   //     .then(result =>displayFacebox(FaceLocation(result)))
   //     .catch(error => console.log('error', error));
-   
 
 
  ////////////////RENDER PRINCIPAL PAGE///////////////////
   
-    
     return (
       <div className="App">
         <Particles options={Particlesconfig} init={particlesInit} />
@@ -112,7 +112,6 @@ function App(){
           ? <Signin onRouteChange={onRouteChange} />
           : ( route === "home" 
            ? <div>
-            
             <Logo />
             <Rank />
             <ImageLinkForm onInputChange={onInputChange} onButtonChange={onButtonChange} />
@@ -126,5 +125,4 @@ function App(){
     );
   
 }
-
 export default App;
