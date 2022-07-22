@@ -86,12 +86,14 @@ function App(){
 
   /////////BUTTON PRINCIPAL PAGE///////////////////
   const [imageUrl,setImageUrl]=useState("");
-  const {data,loading, error} = useFetch(imageUrl);
+  const [data,loading, error] = useFetch(imageUrl);
    
   const onButtonChange = async () => {
-
-      setImageUrl(input);
-       displayFacebox(FaceLocation(data)); 
+    
+     setImageUrl(input);
+    if (data!==null){
+       displayFacebox(FaceLocation(data))
+    }  
   }
  
     
