@@ -15,7 +15,6 @@ export default function useFetch(imageUrl) {
   const [error, setError] = useState(null);
   const [box,setBox] = useState();
 
-  
 
   useEffect( () => {
 
@@ -44,12 +43,11 @@ export default function useFetch(imageUrl) {
     };
 
     setLoading(true);
-    fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
-     .then(response => response.json())
-     .then(result => setData(result))
-     .then(resultbox=>setBox(resultbox))
-     .catch(error => setError(error))
-     .finally(setLoading(false))
+      fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
+      .then(response => response.json())
+      .then(result => setData(result))
+      .catch(error => setError(error))
+      .finally(setLoading(false))
       
   },[imageUrl]); 
 
