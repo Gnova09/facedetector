@@ -91,7 +91,7 @@ function App(){
   const onButtonChange = async () => {
     await imageset()
     
-     displayFacebox(FaceLocation(data))
+     displayFacebox(FaceLocation(data));
   }
   const imageset = async () =>{
     setImageUrl(input);
