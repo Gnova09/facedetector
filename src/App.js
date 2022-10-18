@@ -1,6 +1,6 @@
 
 import './App.css';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import useFetch from "./Hooks/useFetch.js";
 import useFacelocation from './Hooks/useFacelocation';
 import Navigator from "./Components/Navigator/Navidator";
@@ -13,12 +13,12 @@ import ImageLinkForm from "./Components/ImageLinkForm/ImageLinkForm";
 import Rank from './Components/Rank/Rank';
 import Signin from './Components/Signin/signin';
 import Register from './Components/Register/Register';
-
+import {StateContext} from './Context/StateContext';
 
 
 /////STARTED PARTICLES BACKGROUND//////
 const particlesInit = async (main) => {
-  console.log(main);
+ // console.log(main);
   await loadFull(main);
 };
 
@@ -34,31 +34,19 @@ const particlesInit = async (main) => {
 //     }
 //   }
 
-function App(){
-  
-  const [route,setRoute]=useState("signin");//creamos el estado de route
+function App() {
+
+  const [route, setRoute] = useState("signin");//creamos el estado de route
+  const [isSignedIn,setIsSignedIn]=useState(false);
 
   //SETTING THE STATE BOX//////////
-  const [box,setBox] = useState({});
+  const [box, setBox] = useState({});
   const displayFacebox = (boxData) => {
     // this.setState({ box: boxData });
     setBox(boxData);
   }
 
   ///////onRouteChange WITH A BUTTON//////////
-  
-  const [isSignedIn, setIsSigned] = useState(false);
-  const onRouteChange= (route)=> {
-    if(route === "home"){
-      // this.setState({isSignedIn: true})
-      setIsSigned(true);
-    }else if(route === "signin"){ 
-      // this.setState({isSignedIn: false})
-      setIsSigned(false);
-    }
-    // this.setState({route: route})
-    setRoute(route);
-  }
   
 
   //CALCULATE FACE LOCATION(BOX) ////////////
@@ -78,22 +66,22 @@ function App(){
   }
 
   ////////////////INPUT ////////////
-  const [input, setInput] = useState(""); 
+  const [input, setInput] = useState("");
   const onInputChange = (event) => {
     // this.setState({ input: event.target.value });
     setInput(event.target.value);
   }
 
   /////////BUTTON PRINCIPAL PAGE///////////////////
-  const [imageUrl,setImageUrl]= useState ("");
-  const {data,refetch} = useFetch(imageUrl);
+  const [imageUrl, setImageUrl] = useState("");
+  //const {data,refetch} = useFetch(imageUrl);
   //const {box:boxlocation} = useFacelocation(data);
   const onButtonChange = async () => {
     await imageset()
-    
-     displayFacebox(FaceLocation(data));
+
+    //displayFacebox(FaceLocation(data));
   }
-  const imageset = async () =>{
+  const imageset = async () => {
     setImageUrl(input);
     console.log("Image set")
   }
@@ -102,29 +90,41 @@ function App(){
   //     .then(result =>displayFacebox(FaceLocation(result)))
   //     .catch(error => console.log('error', error));
 
+  ////////Context APP//////////
+  const Context_value={
+    route:{
+      route,
+    setRoute
+    },
+    login:{
+      isSignedIn,
+      setIsSignedIn
+    }
+    
+  }
+  ////////////////RENDER PRINCIPAL PAGE///////////////////
 
- ////////////////RENDER PRINCIPAL PAGE///////////////////
-  
-    return (
-      <div className="App">
-        <Particles options={Particlesconfig} init={particlesInit} />
-        <Navigator isSignedIn={isSignedIn} onRouteChange={onRouteChange} />
-        
+  return (
+    <div className="App">
+     <Particles options={Particlesconfig} init={particlesInit} />
+      <StateContext.Provider value={Context_value}>
+        <Navigator isSignedIn={isSignedIn}  />
+
         {route === "signin"
-          ? <Signin onRouteChange={onRouteChange} />
-          : ( route === "home" 
-           ? <div>
-            <Logo />
-            <Rank />
-            <ImageLinkForm onInputChange={onInputChange} onButtonChange={onButtonChange} />
-            <FaceRecognition box={box} ImageURL={imageUrl} />
-          </div>
-          : <Register onRouteChange={onRouteChange} />
+          ? <Signin />
+          : (route === "home"
+            ? <div>
+              <Logo />
+              <Rank />
+              <ImageLinkForm onInputChange={onInputChange} onButtonChange={onButtonChange} />
+              <FaceRecognition box={box} ImageURL={imageUrl} />
+            </div>
+            : <Register/>
           )
         }
+      </StateContext.Provider>
+    </div>
+  );
 
-      </div>
-    );
-  
 }
 export default App;
