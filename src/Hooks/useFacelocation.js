@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export default function useFacelocation(data) {
-    const [box, setBox] = useState(null)
+    const [box2, setBox2] = useState(null)
     
     useEffect(()=>{
         let faceDataLocation = data.outputs[0].data.regions[0].region_info.bounding_box;
@@ -10,7 +10,7 @@ export default function useFacelocation(data) {
         const img_height = Number(image.height);
         console.log(img_width, img_height, faceDataLocation);
 
-        setBox({
+        setBox2({
             left_Column: (faceDataLocation.left_col * img_width),
             right_Column: (img_width - (faceDataLocation.right_col * img_width)),
             bottom_row: (img_height - (faceDataLocation.bottom_row * img_height)),
@@ -18,6 +18,6 @@ export default function useFacelocation(data) {
         });
 
     },[data])
-    console.log(box);
-    return {box}
+    console.log(box2);
+    return {box2}
 }

@@ -41,11 +41,19 @@ export default function useFetch(imageUrl) {
     };
 
     setLoading(true);
-      fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
+    new Promise(async(resolve, reject) => {
+      await fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
+      .then(response => response.json())
+      .then(result =>{resolve(setData(result))})
+      .catch(error => reject(setError(error)))
+      .finally(setLoading(false))
+      
+    })
+     /*  fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
       .then(response => response.json())
       .then(result => setData(result))
-      .catch(error => setError(error))
-      .finally(setLoading(false))
+      .catch(error => setError(error))S
+      .finally(setLoading(false)) */
       
   },[imageUrl]); 
 
