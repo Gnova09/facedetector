@@ -4,20 +4,24 @@ import { StateContext } from "../../Context/StateContext";
 
 const Signin = () => {
 
-    const { route,login } = useContext(StateContext);
+    const {route, login, usuario } = useContext(StateContext);
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
 
     const {setRoute}=route;
     const {isSignedIn, setIsSignedIn}=login;
+    const {setUser}= usuario;
 
     useEffect(() => {
 
-        isSignedIn ? setRoute("home") : console.log("Route fallido");
+        if(isSignedIn){
+
+            setRoute("home")
+        }  
     // eslint-disable-next-line
     }, [isSignedIn])
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
@@ -34,10 +38,14 @@ const Signin = () => {
             redirect: 'follow'
         };
      
-        fetch("http://localhost:3000/login", requestOptions)
+        await fetch("http://localhost:3000/login", requestOptions)
             .then(response => response.json())
             .then(result => {
-                result === "success" ? setIsSignedIn(true) : alert("Credenciales incorrectas");
+               const res=  result === "Notfound" ? alert("Credenciales incorrectas")  :  
+                (
+                    setUser(result),
+                    setIsSignedIn(true)
+                );
             })
        
     }

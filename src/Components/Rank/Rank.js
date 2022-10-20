@@ -1,14 +1,18 @@
-import React from "react";
+import React,{useContext} from "react";
+import { StateContext } from "../../Context/StateContext";
+
 
 const Rank = () => {
-
+    const { usuario } = useContext(StateContext);
+    const {user}=usuario;
+ 
     return(
         <div>
             <div className="white f3">
-                {"Georges, your current rank is..."}
+                {`${user.name}, your current rank is...`}
             </div>
             <div className="white f3">
-                {"#5"}
+                {user.entries}
             </div>
           
         </div>

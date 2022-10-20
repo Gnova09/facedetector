@@ -1,8 +1,13 @@
-import React from "react";
+import React,{useContext} from "react";
 import "./FaceRecognition.css";
+import { StateContext } from "../../Context/StateContext";
 
-const FaceRecognition = ({ImageURL, box}) => {
 
+const FaceRecognition = () => {
+    const {img} = useContext(StateContext);
+    const{input, box}=img;
+  
+    console.log(input)
     return(
         <div className="center boxIMG">
                 <div className="absolute mt2 ">
@@ -12,7 +17,7 @@ const FaceRecognition = ({ImageURL, box}) => {
                     width="300px"
                     heigth="auto"
                     alt="ImgFacerecognition" 
-                    src= {ImageURL}/>
+                    src= {input}/>
                     <div className="face_box" style={{top: box.top_row, bottom: box.bottom_row, left: box.left_Column, right: box.right_Column}}>
                     </div>
                 </div>

@@ -2,18 +2,25 @@ import React, { useContext, useEffect, useState } from "react";
 import { StateContext } from "../../Context/StateContext";
 
 const Register = () => {
-    const { setRoute } = useContext(StateContext);
+    const {route} = useContext(StateContext);
+    const{setRoute}=route
     const[name,setName]=useState("")
     const[lastname,setLastname]=useState("")
     const[email,setEmail]=useState("")
     const[pass,setPass]=useState("")
     const[created, setCreated]=useState(false);
+    
     useEffect(()=>{
        
-        created ? setRoute("signin") : console.log("hello no pass")
+        if(created){
+            alert("Usuario creado")
+            setRoute("signin")
+            //setRoute("signin")
+        }
             
         // eslint-disable-next-line
-    },[created])
+    },[created]);
+
     const handleRegister = (event) => {
         event.preventDefault();
 
@@ -63,8 +70,7 @@ const Register = () => {
                             <label className="db fw6 lh-copy f6" for="password">Lastname</label>
                             <input required className="b pa2 input-reset ba bg-transparent white w-100"
                              type="text" 
-                             name="password"
-                             id="password" 
+                            
                              onChange={(e) => setLastname(e.target.value)}
                              />
                         </div>

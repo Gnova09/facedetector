@@ -37,20 +37,18 @@ const particlesInit = async (main) => {
 function App() {
 
   const [route, setRoute] = useState("signin");//creamos el estado de route
-  const [isSignedIn,setIsSignedIn]=useState(false);
+  const [isSignedIn, setIsSignedIn]=useState(false);
+  const [user, setUser]=useState({});
 
   //SETTING THE STATE BOX//////////
   const [box, setBox] = useState({});
-  const displayFacebox = (boxData) => {
+  /*const displayFacebox = (boxData) => {
     // this.setState({ box: boxData });
     setBox(boxData);
-  }
-
-  ///////onRouteChange WITH A BUTTON//////////
-  
+  }*/
 
   //CALCULATE FACE LOCATION(BOX) ////////////
-  const FaceLocation = async (data) => {
+ /* const FaceLocation = async (data) => {
     const faceDataLocation = data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById("ImageInput");
     const img_width = Number(image.width);
@@ -63,44 +61,53 @@ function App() {
       bottom_row: (img_height - (faceDataLocation.bottom_row * img_height)),
       top_row: (faceDataLocation.top_row * img_height),
     }
-  }
+  }*/
 
-  ////////////////INPUT ////////////
+  ////////////////INPUT ////////////  
   const [input, setInput] = useState("");
-  const onInputChange = (event) => {
-    // this.setState({ input: event.target.value });
-    setInput(event.target.value);
-  }
 
   /////////BUTTON PRINCIPAL PAGE///////////////////
   const [imageUrl, setImageUrl] = useState("");
-  //const {data,refetch} = useFetch(imageUrl);
+  const {data} = useFetch(imageUrl);
   //const {box:boxlocation} = useFacelocation(data);
-  const onButtonChange = async () => {
+  /*const onButtonChange = async () => {
     await imageset()
 
-    //displayFacebox(FaceLocation(data));
+    displayFacebox(FaceLocation(data));
   }
   const imageset = async () => {
     setImageUrl(input);
     console.log("Image set")
-  }
+  }*/
   //    fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/versions/" + MODEL_VERSION_ID + "/outputs", requestOptions)
   //     .then(response => response.json())
   //     .then(result =>displayFacebox(FaceLocation(result)))
   //     .catch(error => console.log('error', error));
 
   ////////Context APP//////////
-  const Context_value={
+  let Context_value={
     route:{
       route,
-    setRoute
+      setRoute
     },
     login:{
       isSignedIn,
       setIsSignedIn
-    }
+    },
+    usuario:{
+     user,
+     setUser
+    },
     
+    img:{
+      input,
+      setInput,
+      imageUrl,
+      setImageUrl,
+      box,
+      setBox,
+      data
+    }
   }
   ////////////////RENDER PRINCIPAL PAGE///////////////////
 
@@ -108,7 +115,7 @@ function App() {
     <div className="App">
      <Particles options={Particlesconfig} init={particlesInit} />
       <StateContext.Provider value={Context_value}>
-        <Navigator isSignedIn={isSignedIn}  />
+        <Navigator  />
 
         {route === "signin"
           ? <Signin />
@@ -116,8 +123,8 @@ function App() {
             ? <div>
               <Logo />
               <Rank />
-              <ImageLinkForm onInputChange={onInputChange} onButtonChange={onButtonChange} />
-              <FaceRecognition box={box} ImageURL={imageUrl} />
+              <ImageLinkForm  />
+              <FaceRecognition />
             </div>
             : <Register/>
           )
