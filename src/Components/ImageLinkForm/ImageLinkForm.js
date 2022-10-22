@@ -11,7 +11,7 @@ const ImageLinkForm = () => {
         setImg();
         fetch(`http://localhost:3000/Image/${user.email}`)
         .then(response=>response.json())
-        .then(entrie=> setUser({...user, entries:entrie}))
+        .then(entrie=>  setUser({...user, entries:entrie.entries}) )
         FaceLocation(data);
     }
     const setImg = async () => {

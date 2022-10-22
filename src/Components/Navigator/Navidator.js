@@ -2,11 +2,17 @@ import React,{useContext} from "react";
 import { StateContext } from "../../Context/StateContext";
 
 const Navidator = () =>{
-    const { route,login } = useContext(StateContext);
+    const { route,login, img,usuario } = useContext(StateContext);
     const {setRoute}=route;
+    const{setUser}=usuario;
     const {isSignedIn,setIsSignedIn}=login;
+    const {setBox,setImageUrl,setInput}=img;
 
     const handleSingOut=() =>{
+        setBox({});
+        setUser({})
+        setImageUrl("")
+        setInput("")
         setIsSignedIn(false);
         setRoute("signin")
     }
