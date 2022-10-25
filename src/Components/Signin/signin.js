@@ -4,21 +4,21 @@ import { StateContext } from "../../Context/StateContext";
 
 const Signin = () => {
 
-    const {route, login, usuario } = useContext(StateContext);
+    const { route, login, usuario } = useContext(StateContext);
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
 
-    const {setRoute}=route;
-    const {isSignedIn, setIsSignedIn}=login;
-    const {setUser}= usuario;
+    const { setRoute } = route;
+    const { isSignedIn, setIsSignedIn } = login;
+    const { setUser } = usuario;
 
     useEffect(() => {
 
-        if(isSignedIn){
+        if (isSignedIn) {
 
             setRoute("home")
-        }  
-    // eslint-disable-next-line
+        }
+        // eslint-disable-next-line
     }, [isSignedIn])
 
     const handleSubmit = async (event) => {
@@ -37,17 +37,16 @@ const Signin = () => {
             body: raw,
             redirect: 'follow'
         };
-     
+
         await fetch("http://localhost:3000/login", requestOptions)
             .then(response => response.json())
             .then(result => {
-               const res=  result === "Notfound" ? alert("Credenciales incorrectas")  :  
-                (
-                    setUser(result),
-                    setIsSignedIn(true)
-                );
+                const res = result === "Not enable to login" ? alert("Credenciales incorrectas") :
+                    (
+                        setUser(result),
+                        setIsSignedIn(true)
+                    );
             })
-       
     }
 
 
@@ -89,7 +88,7 @@ const Signin = () => {
                         />
                     </div>
                     <div className="lh-copy white mt3">
-                        <p onClick={()=>setRoute("Register")} className="f6 link pointer dim white ">Register</p>
+                        <p onClick={() => setRoute("Register")} className="f6 link pointer dim white ">Register</p>
                     </div>
                 </form>
             </main>

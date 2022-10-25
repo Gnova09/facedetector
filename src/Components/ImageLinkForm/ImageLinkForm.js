@@ -3,25 +3,44 @@ import { StateContext } from "../../Context/StateContext";
 
 const ImageLinkForm = () => {
     const { img, usuario } = useContext(StateContext);
-    const { input, setInput, setImageUrl, setBox, data } = img
-    const{ user,setUser }=usuario;
-    
+    const { input, setInput, setImageUrl, setBox } = img
+    const { user, setUser } = usuario;
 
-    const handlebutton = async () =>{
+
+    const handlebutton = async () => {
         setImg();
         fetch(`http://localhost:3000/Image/${user.email}`)
-        .then(response=>response.json())
-        .then(entrie=>  setUser({...user, entries:entrie.entries}) )
-        FaceLocation(data);
+            .then(response => response.json())
+            .then(entrie => setUser({ ...user, entries: entrie.entries }))
+
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        var raw = JSON.stringify({
+            "url": input
+        });
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        await fetch("http://localhost:3000/ImageURL", requestOptions)
+            .then(response => response.json())
+            .then(result => { FaceLocation(result) })
+
+
     }
     const setImg = async () => {
         await setImageUrl(input);
-       console.log("Image Set")
-    } 
-    
-    const FaceLocation = async(data) => {
+        console.log("Image Set")
+    }
 
-        const faceDataLocation = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const FaceLocation = async (data) => {
+
+        const faceDataLocation = data.regions[0].region_info.bounding_box;
         const image = document.getElementById("ImageInput");
         const img_width = Number(image.width);
         const img_height = Number(image.height);

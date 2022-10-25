@@ -1,7 +1,6 @@
 
 import './App.css';
 import React, {  useState } from 'react';
-import useFetch from "./Hooks/useFetch.js";
 import Navigator from "./Components/Navigator/Navidator";
 import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
@@ -33,9 +32,8 @@ function App() {
   ////////////////INPUT ////////////  
   const [input, setInput] = useState("");
 
-  /////////BUTTON PRINCIPAL PAGE///////////////////
+  /////////Setting Image///////////////////
   const [imageUrl, setImageUrl] = useState("");
-  const {data} = useFetch(imageUrl);
  
   ////////Context APP//////////
   let Context_value={
@@ -55,11 +53,10 @@ function App() {
     img:{
       input,
       setInput,
-      imageUrl,
-      setImageUrl,
       box,
       setBox,
-      data
+      setImageUrl, 
+      imageUrl
     }
   }
   ////////////////RENDER PRINCIPAL PAGE///////////////////
