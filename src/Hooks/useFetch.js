@@ -22,7 +22,7 @@ export default function useFetch(imageUrl) {
     };
     setLoading(true);
     new Promise(async (resolve, reject) => {
-      await fetch("http://localhost:3000/ImageURL", requestOptions)
+      await fetch("https://polar-anchorage-52776.herokuapp.com/ImageURL", requestOptions)
         .then(response => response.json())
         .then(result => { resolve(setData(result)) })
         .catch(error => reject(setError(error)))

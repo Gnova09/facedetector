@@ -9,7 +9,7 @@ const ImageLinkForm = () => {
 
     const handlebutton = async () => {
         setImg();
-        fetch(`http://localhost:3000/Image/${user.email}`)
+        fetch(`https://polar-anchorage-52776.herokuapp.com/Image/${user.email}`)
             .then(response => response.json())
             .then(entrie => setUser({ ...user, entries: entrie.entries }))
 
@@ -27,7 +27,7 @@ const ImageLinkForm = () => {
             redirect: 'follow'
         };
 
-        await fetch("http://localhost:3000/ImageURL", requestOptions)
+        await fetch("https://polar-anchorage-52776.herokuapp.com/ImageURL", requestOptions)
             .then(response => response.json())
             .then(result => { FaceLocation(result) })
 

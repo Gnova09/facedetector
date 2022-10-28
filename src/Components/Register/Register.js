@@ -41,7 +41,7 @@ const Register = () => {
             redirect: 'follow'
         };
 
-        fetch("http://localhost:3000/register", requestOptions)
+        fetch("https://polar-anchorage-52776.herokuapp.com/register", requestOptions)
             .then(response => response.text())
             .then(result => {
 
